@@ -1,0 +1,739 @@
+/* ==========================================================================
+   DineDiscover MVP - Core Styling & Design System (Vanilla CSS)
+   Aesthetics: Deep Midnight Dark Theme, Glassmorphism, Elegant Foodie Accents
+   ========================================================================== */
+
+:root {
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  /* Color Palette */
+  --bg-main: #0a0d14;
+  --bg-surface: #121824;
+  --bg-surface-glass: rgba(18, 24, 36, 0.75);
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-color-hover: rgba(255, 255, 255, 0.15);
+  
+  --primary: #ff6b35; /* Vibrant Coral */
+  --primary-hover: #ff8552;
+  --primary-glow: rgba(255, 107, 53, 0.15);
+  
+  --secondary: #ffb800; /* Amber Gold for Ratings/Michelin */
+  --secondary-glow: rgba(255, 184, 0, 0.2);
+  
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  
+  /* Layout Dimensions */
+  --sidebar-width: 440px;
+  --header-height: 70px;
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease;
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Main Application Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden; /* Prevent body-level scrolling */
+}
+
+/* Sidebar Structure */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 1050; /* Higher than Leaflet map overlays (1000) */
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Header Section */
+.app-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-icon {
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.brand h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Autocomplete Search input */
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Suggestions Dropdown */
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: rgba(255, 107, 53, 0.08);
+  color: var(--primary);
+}
+
+/* Results Content */
+.results-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Restaurant Cards */
+.restaurant-card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-color-hover);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.restaurant-card.selected {
+  border-color: var(--primary);
+  background-color: rgba(255, 107, 53, 0.05);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.provider-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.badge-foursquare { background-color: rgba(249, 74, 142, 0.15); color: #f94a8e; }
+.badge-google { background-color: rgba(66, 133, 244, 0.15); color: #4285f4; }
+.badge-tomtom { background-color: rgba(223, 30, 38, 0.15); color: #df1e26; }
+.badge-yelp { background-color: rgba(211, 35, 35, 0.15); color: #d32323; }
+.badge-cache { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+
+.card-address {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.card-cuisine {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.card-price {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.price-active { color: var(--text-primary); }
+.price-inactive { color: rgba(255, 255, 255, 0.15); }
+
+/* Details Panel (Slides in) */
+.details-panel {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+  z-index: 9;
+  transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.details-panel.open {
+  transform: translateX(-100%);
+}
+
+.details-header {
+  position: relative;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.details-header-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, var(--bg-surface) 0%, rgba(18, 24, 36, 0.4) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.details-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: 1.1rem;
+}
+
+.details-close-btn:hover {
+  background-color: var(--primary);
+  transform: scale(1.1);
+}
+
+.details-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  color: var(--secondary);
+  font-size: 1.1rem;
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.rating-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Menu Items Section */
+.menu-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.menu-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu-item {
+  background-color: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.menu-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-item-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.menu-item-description {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.menu-item-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Map Section (Full screen container behind sidebar) */
+.map-container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  background-color: #0b0f19;
+}
+
+/* Leaflet Overwrites for dark styling */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-tile {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background-color: var(--bg-surface) !important;
+}
+
+/* Provider Console Widget */
+.console-widget {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  max-height: 380px;
+  background-color: rgba(18, 24, 36, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  z-index: 1010; /* Overlay above Leaflet tiles/controls (1000) */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: var(--transition-smooth);
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.console-header h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.console-body {
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.console-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.console-label {
+  color: var(--text-secondary);
+}
+
+.console-value {
+  font-weight: 600;
+}
+
+.console-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: 100%;
+  transition: var(--transition-fast);
+}
+
+.console-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.console-btn-danger {
+  background-color: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.console-btn-danger:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.console-logs {
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8px;
+  border-radius: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-entry {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.log-entry.success { color: var(--success); }
+.log-entry.fail { color: var(--danger); }
+.log-entry.info { color: #60a5fa; }
+
+/* Filter Chips overlay in map area */
+.filter-overlay {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1010; /* Overlay above Leaflet tiles/controls (1000) */
+}
+
+.filter-chip {
+  background-color: rgba(18, 24, 36, 0.85);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-chip.active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+/* Empty placeholder */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  text-align: center;
+  color: var(--text-secondary);
+  gap: 12px;
+}
+
+.empty-state-icon {
+  font-size: 2rem;
+  color: var(--text-muted);
+}
+
+/* Custom Map Marker Pins */
+.custom-restaurant-pin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.pin-ring {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: pinPulse 2s infinite ease-out;
+  background-color: rgba(255, 107, 53, 0.1);
+}
+
+.pin-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--primary);
+  z-index: 2;
+}
+
+/* Highlighted (Selected) Pin styling */
+.custom-restaurant-pin.highlighted .pin-ring {
+  border-color: var(--secondary);
+  animation: pinPulseSelected 1.5s infinite ease-in-out;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 184, 0, 0.15);
+}
+
+.custom-restaurant-pin.highlighted .pin-dot {
+  background-color: var(--secondary);
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 8px var(--secondary);
+}
+
+@keyframes pinPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes pinPulseSelected {
+  0% {
+    transform: scale(0.7);
+    box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.5);
+  }
+  70% {
+    transform: scale(1.3);
+    box-shadow: 0 0 0 10px rgba(255, 184, 0, 0);
+  }
+  100% {
+    transform: scale(0.7);
+    box-shadow: 0 0 0 0 rgba(255, 184, 0, 0);
+  }
+}
+
+/* ==========================================================================
+   Mobile-Responsive Media Queries
+   ========================================================================== */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: 55vh;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .details-panel {
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .details-panel.open {
+    transform: translateY(-100%);
+    left: 0;
+  }
+  .map-container {
+    flex: 1;
+    height: 45vh;
+    width: 100%;
+  }
+  .console-widget {
+    width: calc(100% - 40px);
+    left: 20px;
+    bottom: 20px;
+    max-height: 250px;
+  }
+  .filter-overlay {
+    top: 48vh;
+    right: 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .filter-chip {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}
